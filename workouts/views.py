@@ -64,9 +64,9 @@ class WorkoutDetailView(LoginRequiredMixin, DetailView):
             sets = list(exercise.sets.all())
             n_sets = len(sets)
 
-            # Resoconto muscolare: somma le serie su ogni muscolo colpito
-            for muscle in exercise.get_muscles():
-                muscle_sets[muscle] = muscle_sets.get(muscle, 0) + n_sets
+            # Resoconto muscolare: conteggio lineare delle serie sull'UNICO muscolo target
+            muscle = exercise.get_target_muscle()
+            muscle_sets[muscle] = muscle_sets.get(muscle, 0) + n_sets
 
             # Volume totale = somma di reps * peso (solo forza)
             for s in sets:

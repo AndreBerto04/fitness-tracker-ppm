@@ -71,7 +71,7 @@
                         <small class="text-muted fs-6">({{ exercise.get_activity_type_display }})</small>
                     </h5>
                     <p class="small text-muted mb-2">
-                        Muscoli: {% for m in exercise.get_muscles %}<span class="badge bg-light text-dark border">{{ m }}</span> {% endfor %}
+                        Target: <span class="badge bg-light text-dark border">{{ exercise.get_target_muscle }}</span>
                     </p>
 
                     {% if exercise.sets.all %}

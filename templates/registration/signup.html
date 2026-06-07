@@ -1,37 +1,40 @@
 {% extends 'base.html' %}
 
-{% block title %}Login - Fitness Tracker{% endblock %}
+{% block title %}Registrazione - Fitness Tracker{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-4">
+    <div class="col-md-5">
         <div class="card shadow-sm mt-5">
             <div class="card-body">
-                <h3 class="card-title text-center mb-4">Accedi al Tracker</h3>
+                <h3 class="card-title text-center mb-4">📝 Crea il tuo account Atleta</h3>
 
                 <form method="post">
                     {% csrf_token %}
 
-                    {# Errori globali (es. credenziali errate) - Slide 19-20 #}
+                    {# Errori globali del form (non legati a un singolo campo) #}
                     {% if form.non_field_errors %}
                         <div class="alert alert-danger">{{ form.non_field_errors }}</div>
                     {% endif %}
 
                     {% for field in form %}
                         <div class="mb-3">
-                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
                             {{ field }}
+                            {% if field.help_text %}
+                                <div class="form-text small">{{ field.help_text|safe }}</div>
+                            {% endif %}
                             {% if field.errors %}
                                 <div class="text-danger small mt-1">{{ field.errors }}</div>
                             {% endif %}
                         </div>
                     {% endfor %}
 
-                    <button type="submit" class="btn btn-primary w-100 mt-2">Accedi</button>
+                    <button type="submit" class="btn btn-success w-100 mt-2">Registrati</button>
                 </form>
 
                 <p class="text-center text-muted small mt-3 mb-0">
-                    Non hai un account? <a href="{% url 'signup' %}">Registrati</a>
+                    Hai già un account? <a href="{% url 'login' %}">Accedi</a>
                 </p>
             </div>
         </div>

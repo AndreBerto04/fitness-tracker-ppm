@@ -18,7 +18,10 @@ urlpatterns = [
     # Rotta per il pannello di amministrazione
     path('admin/', admin.site.urls),
 
-    # Include tutti gli URL nativi di Django per login e logout
+    # Rotte custom dell'app accounts (login con form stilizzato + signup)
+    path('accounts/', include('accounts.urls')),
+
+    # URL nativi di Django per logout, password reset, ecc.
     path('accounts/', include('django.contrib.auth.urls')),
 
     # Pagina iniziale (Home) accessibile solo dopo il login

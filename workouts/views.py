@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from accounts.models import CustomUser
 from .models import WorkoutLog, ExerciseSession, ExerciseSet, Goal
-from .forms import WorkoutLogForm
+from .forms import WorkoutLogForm, ExerciseSessionForm, ExerciseSetForm, GoalForm
 
 
 # 1. LISTA STORICO (Read) - con biforcazione RBAC Coach/Atleta
@@ -53,44 +53,37 @@ class WorkoutDetailView(LoginRequiredMixin, DetailView):
         return WorkoutLog.objects.filter(user=self.request.user)
 
     def post(self, request, *args, **kwargs):
-        workout = self.get_object()
+        self.object = self.get_object()
+        workout = self.object
         action_type = request.POST.get('action_type')
 
-        # CASO 1: creazione del solo nome dell'esercizio
+        # CASO 1: creazione dell'esercizio tramite ModelForm (validazione nativa)
         if action_type == 'create_exercise':
-            exercise_name = request.POST.get('exercise_name')
-            activity_type = request.POST.get('activity_type')
-            if exercise_name:
-                ExerciseSession.objects.create(
-                    workout_log=workout,
-                    name=exercise_name,
-                    activity_type=activity_type
-                )
+            form = ExerciseSessionForm(request.POST)
+            if form.is_valid():
+                exercise = form.save(commit=False)
+                exercise.workout_log = workout
+                exercise.save()
+            else:
+                # Mostra il form con gli errori di validazione
+                context = self.get_context_data()
+                context['exercise_form'] = form
+                return self.render_to_response(context)
 
-        # CASO 2: aggiunta di una serie a un esercizio esistente
+        # CASO 2: aggiunta di una serie tramite ModelForm
         elif action_type == 'add_set':
-            exercise_id = request.POST.get('exercise_id')
-            exercise = get_object_or_404(ExerciseSession, id=exercise_id, workout_log=workout)
-            rpe = request.POST.get('rpe')
-
-            if exercise.activity_type == 'FORZA':
-                reps = request.POST.get('reps')
-                weight = request.POST.get('weight')
-                ExerciseSet.objects.create(
-                    exercise_session=exercise,
-                    reps=reps if reps else None,
-                    weight=weight if weight else None,
-                    rpe=rpe if rpe else None
-                )
-            elif exercise.activity_type == 'CARDIO':
-                distance = request.POST.get('distance')
-                duration = request.POST.get('duration')
-                ExerciseSet.objects.create(
-                    exercise_session=exercise,
-                    distance=distance if distance else None,
-                    duration=duration if duration else None,
-                    rpe=rpe if rpe else None
-                )
+            exercise = get_object_or_404(
+                ExerciseSession, id=request.POST.get('exercise_id'), workout_log=workout
+            )
+            form = ExerciseSetForm(request.POST)
+            if form.is_valid():
+                exercise_set = form.save(commit=False)
+                exercise_set.exercise_session = exercise
+                exercise_set.save()
+            else:
+                context = self.get_context_data()
+                context['set_form'] = form
+                return self.render_to_response(context)
 
         return redirect('workout_detail', pk=workout.pk)
 
@@ -166,17 +159,18 @@ class GoalListView(LoginRequiredMixin, ListView):
         return context
 
     def post(self, request, *args, **kwargs):
-        title = request.POST.get('title')
-        target_value = request.POST.get('target_value')
-        if title and target_value:
-            Goal.objects.create(
-                user=request.user,
-                title=title,
-                target_value=target_value,
-                exercise_name=request.POST.get('exercise_name') or "Panca Piana",
-                activity_type=request.POST.get('activity_type') or "FORZA",
-            )
-        return redirect('goal_list')
+        # Creazione obiettivo tramite ModelForm (validazione nativa)
+        form = GoalForm(request.POST)
+        if form.is_valid():
+            goal = form.save(commit=False)
+            goal.user = request.user
+            goal.save()
+            return redirect('goal_list')
+        # Form non valido: rirenderizza la lista mostrando gli errori
+        self.object_list = self.get_queryset()
+        context = self.get_context_data()
+        context['goal_form'] = form
+        return self.render_to_response(context)
 
 
 # 9. DETTAGLIO ATLETA PER IL COACH (Read log + Update coach_feedback)

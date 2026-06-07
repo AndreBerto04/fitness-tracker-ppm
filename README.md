@@ -107,7 +107,9 @@ Account demo per la commissione:
 | Atleta | `atleta_demo` | `atleta12345` |
 | Coach  | `coach_demo`  | `coach12345`  |
 
-**URL deploy:** _(da inserire dopo la pubblicazione)_
+## 🌐 Deploy Online
+Il progetto è distribuito e raggiungibile pubblicamente al seguente indirizzo:
+**URL Deploy:** [https://fitness-tracker-ppm.onrender.com](https://fitness-tracker-ppm.onrender.com)
 
 ## 7. Test rapido nel browser
 1. Login come `coach_demo` → si apre la **Dashboard Coach** con `atleta_demo`.

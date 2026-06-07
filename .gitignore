@@ -9,5 +9,11 @@ __pycache__/
 .idea/
 .vscode/
 
+# OS
+.DS_Store
+
+# Static collezionati in deploy
+staticfiles/
+
 # Environment variables
 .env

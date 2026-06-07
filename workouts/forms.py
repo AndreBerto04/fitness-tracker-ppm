@@ -1,0 +1,15 @@
+from django import forms
+from .models import WorkoutLog
+
+class WorkoutLogForm(forms.ModelForm):
+    class Meta:
+        model = WorkoutLog
+        
+        fields = ['title']
+        
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Es. Allenamento Spinta, Corsa Mattutina...'
+            }),
+        }

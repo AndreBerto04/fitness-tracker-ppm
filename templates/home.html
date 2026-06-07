@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Fitness Tracker{% endblock %}
+
+{% block content %}
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Benvenuto nel tuo Fitness Tracker, {{ user.username }}!</h1>
+        <p class="col-md-8 fs-4">La tua piattaforma per monitorare allenamenti, progressi e obiettivi.</p>
+        <hr class="my-4">
+        <p>Ti sei autenticato correttamente con il ruolo di:
+            <strong>
+                {% if user.is_coach %} Coach {% else %} Atleta (Standard User) {% endif %}
+            </strong>
+        </p>
+
+        <!-- Navigazione condizionata dal ruolo (RBAC nell'interfaccia) -->
+        <div class="mt-4 d-flex flex-wrap gap-2">
+            {% if user.is_coach %}
+                <a href="{% url 'workout_list' %}" class="btn btn-info btn-lg">🧑‍🏫 Dashboard Coach</a>
+            {% else %}
+                <a href="{% url 'workout_list' %}" class="btn btn-primary btn-lg">📋 I Miei Allenamenti</a>
+                <a href="{% url 'workout_create' %}" class="btn btn-success btn-lg">+ Registra Allenamento</a>
+                <a href="{% url 'goal_list' %}" class="btn btn-warning btn-lg">🎯 I Miei Obiettivi</a>
+            {% endif %}
+        </div>
+
+        <form method="post" action="{% url 'logout' %}" class="mt-4">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Disconnetti</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

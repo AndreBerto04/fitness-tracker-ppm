@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Coach - Fitness Tracker{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>🧑‍🏫 Dashboard Coach</h2>
+    <span class="badge bg-primary fs-6">Atleti seguiti: {{ athletes|length }}</span>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        {% if athletes %}
+        <div class="table-responsive">
+            <table class="table table-hover border align-middle mb-0">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>Atleta</th>
+                        <th>Peso (kg)</th>
+                        <th>Allenamenti</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% for athlete in athletes %}
+                    <tr>
+                        <td class="fw-bold text-start ps-4">{{ athlete.username }}</td>
+                        <td>{{ athlete.weight|default:"—" }}</td>
+                        <td>{{ athlete.workouts.count }}</td>
+                        <td>
+                            <a href="{% url 'coach_athlete_detail' athlete.id %}" class="btn btn-sm btn-primary">
+                                📂 Gestisci
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted text-center mb-0">Nessun atleta associato al tuo profilo.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

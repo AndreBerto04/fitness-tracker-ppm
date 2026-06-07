@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ workout.title }} - Dettagli{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-7 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">🏋️‍♂️ {{ workout.title }}</h5>
+                <span class="badge bg-secondary">{{ workout.date|date:"d/m/Y" }}</span>
+            </div>
+            <div class="card-body">
+                {% if workout.exercises.all %}
+                    {% for exercise in workout.exercises.all %}
+                        <div class="border-start border-4 border-primary ps-3 mb-4 position-relative">
+                            
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h5 class="text-primary mb-2">{{ exercise.name }} 
+                                    <small class="text-muted fs-6">({{ exercise.get_activity_type_display }})</small>
+                                </h5>
+                                <a href="{% url 'delete_exercise' exercise.id %}" class="btn btn-sm btn-outline-danger py-0 px-1" title="Elimina intero esercizio" onclick="return confirm('Vuoi davvero eliminare questo esercizio e tutte le sue serie?')">
+                                    🗑️ Rimuovi
+                                </a>
+                            </div>
+                            
+                            {% if exercise.sets.all %}
+                                <div class="d-flex flex-column gap-1 mt-2">
+                                    {% for set in exercise.sets.all %}
+                                        <div class="bg-light p-2 rounded small d-flex justify-content-between align-items-center">
+                                            <div>
+                                                {% if exercise.activity_type == 'FORZA' %}
+                                                    💪 <strong>{{ set.reps }}</strong> rep @ <strong>{{ set.weight }}</strong> kg
+                                                {% else %}
+                                                    🏃‍♂️ <strong>{{ set.distance }}</strong> km in <strong>{{ set.duration }}</strong> min
+                                                {% endif %}
+                                                {% if set.rpe %}
+                                                    <span class="badge bg-warning text-dark ms-2">RPE {{ set.rpe }}</span>
+                                                {% endif %}
+                                            </div>
+                                            <a href="{% url 'delete_set' set.id %}" class="text-danger text-decoration-none fw-bold px-1" title="Elimina serie" onclick="return confirm('Eliminare questa serie?')">
+                                                ×
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p class="text-muted small mb-0">Nessun dettaglio inserito per questo esercizio.</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-4">Nessun esercizio ancora registrato per questa sessione.</p>
+                {% endif %}
+            </div>
+        </div>
+        <a href="{% url 'workout_list' %}" class="btn btn-secondary mt-3">📋 Torna allo Storico</a>
+    </div>
+
+    <div class="col-md-5">
+        
+        <div class="card shadow-sm mb-4 border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">🆕 1. Crea Attività / Esercizio</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action_type" value="create_exercise">
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tipo di Attività</label>
+                        <select name="activity_type" class="form-select">
+                            <option value="FORZA">Forza (Palestra / Corpo Libero)</option>
+                            <option value="CARDIO">Cardio (Corsa / Bici / Nuoto)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nome Esercizio / Attività</label>
+                        <input type="text" name="exercise_name" class="form-control" placeholder="Es. Panca Piana, Squat, Corsa..." required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Aggiungi Esercizio alla Scheda</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-success">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">➕ 2. Inserisci Serie / Frazione</h5>
+            </div>
+            <div class="card-body">
+                {% if workout.exercises.all %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action_type" value="add_set">
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Seleziona Esercizio</label>
+                            <select name="exercise_id" id="exerciseSelect" class="form-select">
+                                {% for exercise in workout.exercises.all %}
+                                    <option value="{{ exercise.id }}" data-type="{{ exercise.activity_type }}">
+                                        {{ exercise.name }} ({{ exercise.get_activity_type_display }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div id="setForzaFields" class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label small fw-bold">Ripetizioni</label>
+                                <input type="number" name="reps" class="form-control" placeholder="Es. 10">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label small fw-bold">Peso (kg)</label>
+                                <input type="number" step="0.01" name="weight" class="form-control" placeholder="Es. 50">
+                            </div>
+                        </div>
+
+                        <div id="setCardioFields" class="row d-none">
+                            <div class="col-6 mb-3">
+                                <label class="form-label small fw-bold">Distanza (km)</label>
+                                <input type="number" step="0.01" name="distance" class="form-control" placeholder="Es. 5.0">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label small fw-bold">Durata (min)</label>
+                                <input type="number" name="duration" class="form-control" placeholder="Es. 25">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Fatica Percepita (RPE 1-10)</label>
+                            <input type="number" name="rpe" min="1" max="10" class="form-control" placeholder="Es. 8">
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">Registra Serie</button>
+                    </form>
+                {% else %}
+                    <p class="text-muted text-center my-2 small">Crea prima un esercizio nel box sopra per poter inserire le serie.</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const exerciseSelect = document.getElementById('exerciseSelect');
+    if (exerciseSelect) {
+        function updateSetFields() {
+            const selectedOption = exerciseSelect.options[exerciseSelect.selectedIndex];
+            const type = selectedOption.getAttribute('data-type');
+            const forzaFields = document.getElementById('setForzaFields');
+            const cardioFields = document.getElementById('setCardioFields');
+            
+            if (type === 'FORZA') {
+                forzaFields.classList.remove('d-none');
+                cardioFields.classList.add('d-none');
+            } else {
+                forzaFields.classList.add('d-none');
+                cardioFields.classList.remove('d-none');
+            }
+        }
+        
+        exerciseSelect.addEventListener('change', updateSetFields);
+        updateSetFields(); // Esegui al caricamento iniziale
+    }
+</script>
+{% endblock %}

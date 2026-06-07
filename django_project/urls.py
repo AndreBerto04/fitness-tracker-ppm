@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from workouts.views import (
     WorkoutListView, WorkoutCreateView, WorkoutUpdateView, WorkoutDeleteView,
-    WorkoutDetailView, ExerciseDeleteView, SetDeleteView,
+    WorkoutDetailView, WorkoutEditView, ExerciseDeleteView, SetDeleteView,
     CoachAthleteDetailView, GoalListView,
 )
 
@@ -35,6 +35,7 @@ urlpatterns = [
 
     # Rotte per l'aggiornamento e l'eliminazione degli allenamenti
     path('workouts/<int:pk>/modifica/', WorkoutUpdateView.as_view(), name='workout_update'),
+    path('workouts/<int:pk>/gestisci/', WorkoutEditView.as_view(), name='workout_edit'),
     path('workouts/<int:pk>/elimina/', WorkoutDeleteView.as_view(), name='workout_delete'),
     path('workouts/<int:pk>/', WorkoutDetailView.as_view(), name='workout_detail'),
 

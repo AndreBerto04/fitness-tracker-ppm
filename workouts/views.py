@@ -39,7 +39,8 @@ class WorkoutCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('workout_detail', kwargs={'pk': self.object.pk})
+        # Dopo la creazione si va all'hub di editing per aggiungere esercizi/serie
+        return reverse('workout_edit', kwargs={'pk': self.object.pk})
 
 
 # 3. DETTAGLIO HUB E AGGIUNTA SERIE (Create - Passo 2)
@@ -50,6 +51,58 @@ class WorkoutDetailView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         # RBAC: l'atleta accede solo ai propri log
+        return WorkoutLog.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        workout = self.object
+
+        total_volume = 0.0
+        muscle_sets = {}  # muscolo -> n. serie totali
+
+        for exercise in workout.exercises.all():
+            sets = list(exercise.sets.all())
+            n_sets = len(sets)
+
+            # Resoconto muscolare: somma le serie su ogni muscolo colpito
+            for muscle in exercise.get_muscles():
+                muscle_sets[muscle] = muscle_sets.get(muscle, 0) + n_sets
+
+            # Volume totale = somma di reps * peso (solo forza)
+            for s in sets:
+                if s.reps and s.weight:
+                    total_volume += s.reps * float(s.weight)
+
+        # Costruzione del report con livello di stimolo, colore e larghezza barra
+        muscle_report = []
+        for muscle, n in sorted(muscle_sets.items(), key=lambda x: x[1], reverse=True):
+            if n >= 5:
+                level, color = 'Alto', 'bg-danger'
+            elif n >= 3:
+                level, color = 'Medio', 'bg-warning'
+            else:
+                level, color = 'Leggero', 'bg-success'
+            muscle_report.append({
+                'muscle': muscle,
+                'sets': n,
+                'level': level,
+                'color': color,
+                'width': min(int(n / 6 * 100), 100),
+            })
+
+        context['total_volume'] = round(total_volume, 1)
+        context['muscle_report'] = muscle_report
+        return context
+
+
+# 3-bis. HUB DI EDITING (aggiunta esercizi e serie) - sola scrittura
+class WorkoutEditView(LoginRequiredMixin, DetailView):
+    model = WorkoutLog
+    template_name = 'workouts/workout_edit.html'
+    context_object_name = 'workout'
+
+    def get_queryset(self):
+        # RBAC: si modificano solo i propri allenamenti
         return WorkoutLog.objects.filter(user=self.request.user)
 
     def post(self, request, *args, **kwargs):
@@ -65,7 +118,6 @@ class WorkoutDetailView(LoginRequiredMixin, DetailView):
                 exercise.workout_log = workout
                 exercise.save()
             else:
-                # Mostra il form con gli errori di validazione
                 context = self.get_context_data()
                 context['exercise_form'] = form
                 return self.render_to_response(context)
@@ -85,7 +137,7 @@ class WorkoutDetailView(LoginRequiredMixin, DetailView):
                 context['set_form'] = form
                 return self.render_to_response(context)
 
-        return redirect('workout_detail', pk=workout.pk)
+        return redirect('workout_edit', pk=workout.pk)
 
 
 # 4. MODIFICA TITOLO ALLENAMENTO (Update)
@@ -107,7 +159,8 @@ class WorkoutUpdateView(LoginRequiredMixin, UpdateView):
         # Intercettiamo quale pulsante è stato premuto nel form
         if self.request.POST.get('save_mode') == 'quick_save':
             return reverse('workout_list')
-        return reverse('workout_detail', kwargs={'pk': self.object.pk})
+        # "Modifica Esercizi" porta all'hub di editing
+        return reverse('workout_edit', kwargs={'pk': self.object.pk})
 
 
 # 5. CANCELLAZIONE ALLENAMENTO (Delete)
@@ -128,7 +181,7 @@ class ExerciseDeleteView(LoginRequiredMixin, View):
         exercise = get_object_or_404(ExerciseSession, pk=pk, workout_log__user=request.user)
         workout_pk = exercise.workout_log.pk
         exercise.delete()
-        return redirect('workout_detail', pk=workout_pk)
+        return redirect('workout_edit', pk=workout_pk)
 
 
 # 7. ELIMINA UNA SINGOLA SERIE
@@ -137,7 +190,7 @@ class SetDeleteView(LoginRequiredMixin, View):
         set_obj = get_object_or_404(ExerciseSet, pk=pk, exercise_session__workout_log__user=request.user)
         workout_pk = set_obj.exercise_session.workout_log.pk
         set_obj.delete()
-        return redirect('workout_detail', pk=workout_pk)
+        return redirect('workout_edit', pk=workout_pk)
 
 
 # 8. DASHBOARD OBIETTIVI (Read + Create obiettivi suggeriti)

@@ -23,9 +23,43 @@ class ExerciseSession(models.Model):
         ('CARDIO', 'Cardio / Corsa / Bici / Nuoto'),
     ]
 
+    # Mappatura keyword (nel nome) -> muscoli precisi coinvolti
+    MUSCLE_MAP = {
+        'panca': ['Gran Pettorale', 'Deltoide Anteriore', 'Tricipiti'],
+        'croci': ['Gran Pettorale'],
+        'spinte': ['Gran Pettorale', 'Deltoide Anteriore', 'Tricipiti'],
+        'dip': ['Gran Pettorale', 'Tricipiti'],
+        'piegamenti': ['Gran Pettorale', 'Tricipiti'],
+        'push up': ['Gran Pettorale', 'Tricipiti'],
+        'squat': ['Quadricipiti', 'Glutei', 'Femorali'],
+        'affondi': ['Quadricipiti', 'Glutei'],
+        'pressa': ['Quadricipiti', 'Glutei'],
+        'leg press': ['Quadricipiti', 'Glutei'],
+        'leg extension': ['Quadricipiti'],
+        'leg curl': ['Femorali'],
+        'stacco': ['Gran Dorsale', 'Femorali', 'Glutei', 'Trapezio'],
+        'deadlift': ['Gran Dorsale', 'Femorali', 'Glutei', 'Trapezio'],
+        'trazioni': ['Gran Dorsale', 'Bicipiti'],
+        'pull up': ['Gran Dorsale', 'Bicipiti'],
+        'lat machine': ['Gran Dorsale', 'Bicipiti'],
+        'rematore': ['Gran Dorsale', 'Bicipiti', 'Trapezio'],
+        'pulley': ['Gran Dorsale', 'Bicipiti'],
+        'military': ['Deltoide Anteriore', 'Tricipiti', 'Trapezio'],
+        'lento': ['Deltoide Anteriore', 'Tricipiti'],
+        'shoulder press': ['Deltoide Anteriore', 'Tricipiti'],
+        'alzate': ['Deltoide Laterale'],
+        'curl': ['Bicipiti'],
+        'french press': ['Tricipiti'],
+        'pushdown': ['Tricipiti'],
+        'crunch': ['Addominali'],
+        'plank': ['Addominali'],
+        'polpacci': ['Polpacci'],
+        'calf': ['Polpacci'],
+    }
+
     workout_log = models.ForeignKey(
-        WorkoutLog, 
-        on_delete=models.CASCADE, 
+        WorkoutLog,
+        on_delete=models.CASCADE,
         related_name='exercises'
     )
     name = models.CharField(max_length=100)  # Es. "Panca Piana" o "Corsa"
@@ -33,6 +67,19 @@ class ExerciseSession(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.get_activity_type_display()})"
+
+    def get_muscles(self):
+        """Restituisce la lista dei muscoli precisi colpiti dall'esercizio."""
+        if self.activity_type == 'CARDIO':
+            return ['Sistema Cardiovascolare']
+        name_lower = self.name.lower()
+        muscles = []
+        for keyword, target_muscles in self.MUSCLE_MAP.items():
+            if keyword in name_lower:
+                for m in target_muscles:
+                    if m not in muscles:
+                        muscles.append(m)
+        return muscles or ['Generico / Altro']
 
 
 # 3. LE SINGOLE SERIE O FRAZIONI DI ALLENAMENTO

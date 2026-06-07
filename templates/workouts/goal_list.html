@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}I Tuoi Obiettivi - FitnessTracker{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>🎯 Pannello Obiettivi Fitness</h1>
+        <a href="{% url 'workout_list' %}" class="btn btn-outline-secondary">
+            ⬅️ Torna allo Storico
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">📋 I tuoi Target Correnti</h5>
+                </div>
+                <div class="card-body">
+                    {% if goals %}
+                        {% for goal in goals %}
+                            <div class="mb-4 p-3 bg-light rounded border">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="mb-0 text-primary">{{ goal.title }}</h5>
+                                    <span class="badge {% if goal.is_completed %}bg-success{% else %}bg-warning text-dark{% endif %}">
+                                        {% if goal.is_completed %}🏆 Raggiunto{% else %}⏳ In Corso{% endif %}
+                                    </span>
+                                </div>
+                                
+                                <p class="text-muted small mb-2">
+                                    Attività: <strong>{{ goal.get_activity_type_display }}</strong> | 
+                                    Esercizio di riferimento: <code>{{ goal.exercise_name }}</code> | 
+                                    Target da raggiungere: <strong>{{ goal.target_value }}</strong>
+                                </p>
+
+                                {% with progress=goal.get_progress|default_if_none:0 %}
+                                    <div class="progress" style="height: 25px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated {% if progress == 100 %}bg-success{% else %}bg-primary{% endif %} dynamic-progress-bar" 
+                                            role="progressbar"
+                                            data-progress="{{ progress }}"
+                                            aria-label="Progresso: {{ progress }} percento per {{ goal.title }}">
+                                            {{ progress }}%
+                                        </div>
+                                    </div>
+                                {% endwith %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-5 text-muted">
+                            <p class="fs-4 mb-2">Non hai ancora impostato nessun obiettivo personale.</p>
+                            <p class="small">Usa i suggerimenti sulla destra basati sul tuo peso corporeo per iniziare a sfidarti!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">💡 Target Suggeriti dal Sistema</h5>
+                </div>
+                <div class="card-body">
+                    {% if request.user.weight %}
+                        <p class="small text-muted mb-3">
+                            Rilevato peso corporeo di <strong>{{ request.user.weight }} kg</strong>. 
+                            Ecco i tuoi traguardi fisiologici ideali (Livello Intermedio):
+                        </p>
+                        
+                        {% for sug in suggested_goals %}
+                            <div class="card mb-3 border-light bg-light">
+                                <div class="card-body p-3">
+                                    <h6 class="fw-bold text-dark mb-1">{{ sug.title }}</h6>
+                                    <p class="small text-muted mb-2">{{ sug.description }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="badge bg-secondary">Obiettivo: {{ sug.target_value }}</span>
+                                        
+                                        <form method="post" class="m-0">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="title" value="{{ sug.title }}">
+                                            <input type="hidden" name="target_value" value="{{ sug.target_value }}">
+                                            <input type="hidden" name="exercise_name" value="{{ sug.exercise_name }}">
+                                            <input type="hidden" name="activity_type" value="{{ sug.activity_type }}">
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                ⚡ Attiva
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-3 text-muted">
+                            <p class="small mb-2">Nessun dato antropometrico rilevato.</p>
+                            <p class="x-small mb-3">Inserisci il tuo peso corporeo per sbloccare gli obiettivi algoritmici personalizzati.</p>
+                            <a href="#" class="btn btn-sm btn-outline-info disabled">Aggiorna Profilo (Presto Disponibile)</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Questo script viene eseguito sul browser dopo che Django ha compilato la pagina
+    document.addEventListener("DOMContentLoaded", function() {
+        // Selezioniamo tutte le barre che hanno la nostra classe speciale
+        const bars = document.querySelectorAll('.dynamic-progress-bar');
+        
+        bars.forEach(function(bar) {
+            // Estraiamo il numero memorizzato nel data-progress
+            const progressValue = bar.getAttribute('data-progress');
+            // Applichiamo la larghezza in tempo reale senza confondere i linter di VS Code
+            bar.style.width = progressValue + '%';
+        });
+    });
+</script>
+{% endblock %}

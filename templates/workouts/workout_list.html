@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}I Miei Allenamenti - Fitness Tracker{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📋 Il tuo Storico Allenamenti</h2>
+    <a href="{% url 'workout_create' %}" class="btn btn-success">+ Registra Allenamento</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        {% if workouts %}
+           <div class="table-responsive">
+    <table class="table table-hover border align-middle mb-0">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>Data</th>
+                <th>Titolo Allenamento</th>
+                <th>Esercizi</th>
+                <th>Feedback del Coach</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            {% for workout in workouts %}
+                <tr>
+                    <!-- 1. DATA (Centrata e grigia) -->
+                    <td class="text-muted">{{ workout.date|date:"d/m/Y" }}</td>
+                    
+                    <!-- 2. TITOLO (Allineato a sinistra con un po' di margine per staccarlo dal bordo) -->
+                    <td class="fw-bold text-start ps-4">
+                        <a href="{% url 'workout_detail' workout.id %}" class="text-decoration-none text-dark">
+                            {{ workout.title }}
+                        </a>
+                    </td>
+                    
+                    <!-- 3. ESERCIZI (Perfettamente centrati nel loro spazio) -->
+                    <td>
+                        {% if workout.exercises.all %}
+                            <div class="d-flex flex-wrap gap-2 justify-content-center">
+                                {% for exercise in workout.exercises.all %}
+                                    <span class="badge bg-light text-dark border p-2">
+                                        {{ exercise.name }} 
+                                        <span class="badge bg-primary ms-1">{{ exercise.sets.count }} set</span>
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <span class="text-muted small"><i>Nessun esercizio registrato</i></span>
+                        {% endif %}
+                    </td>
+                    
+                    <!-- 4. FEEDBACK COACH (Centrato) -->
+                    <td class="text-muted small">
+                        {% if workout.coach_feedback %}
+                            💬 {{ workout.coach_feedback }}
+                        {% else %}
+                            In attesa di feedback
+                        {% endif %}
+                    </td>
+                    
+                    <!-- 5. AZIONI (Allineato a destra o centrato, senza forzature) -->
+                    <td class="text-nowrap">
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Azioni">
+                            <a href="{% url 'workout_detail' workout.id %}" class="btn btn-primary">
+                                👁️ Visualizza
+                            </a>
+                            <a href="{% url 'workout_update' workout.id %}" class="btn btn-outline-primary">
+                                ✏️ Modifica
+                            </a>
+                            <a href="{% url 'workout_delete' workout.id %}" class="btn btn-outline-danger">
+                                🗑️ Elimina
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">
+                        Nessun allenamento registrato. Clicca su "+ Registra Allenamento" per iniziare!
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+        {% else %}
+            <div class="text-center py-4">
+                <p class="text-muted fs-5">Non hai ancora registrato nessun allenamento.</p>
+                <p class="small text-secondary">Inizia subito premendo il pulsante in alto!</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="{% url 'home' %}" class="btn btn-secondary">Torna alla Dashboard</a>
+</div>
+{% endblock %}

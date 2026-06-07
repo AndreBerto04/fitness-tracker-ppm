@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Atleta {{ athlete.username }} - Fitness Tracker{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📂 Log di {{ athlete.username }}</h2>
+    <a href="{% url 'workout_list' %}" class="btn btn-outline-secondary">← Dashboard</a>
+</div>
+
+{% if workouts %}
+    {% for workout in workouts %}
+    <div class="card shadow-sm mb-3">
+        <div class="card-header d-flex justify-content-between">
+            <span class="fw-bold">{{ workout.title }}</span>
+            <span class="text-muted">{{ workout.date|date:"d/m/Y" }}</span>
+        </div>
+        <div class="card-body">
+            <!-- Riepilogo esercizi -->
+            <ul class="mb-3">
+                {% for exercise in workout.exercises.all %}
+                <li>{{ exercise.name }} <small class="text-muted">({{ exercise.get_activity_type_display }})</small></li>
+                {% empty %}
+                <li class="text-muted">Nessun esercizio registrato.</li>
+                {% endfor %}
+            </ul>
+
+            <!-- Form POST rapido per il feedback del coach -->
+            <form method="post" action="{% url 'coach_athlete_detail' athlete.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="log_id" value="{{ workout.id }}">
+                <label class="form-label fw-bold">💬 Feedback del Coach</label>
+                <div class="input-group">
+                    <textarea name="coach_feedback" class="form-control" rows="2"
+                              placeholder="Scrivi un feedback...">{{ workout.coach_feedback|default_if_none:"" }}</textarea>
+                    <button type="submit" class="btn btn-success">Salva</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <p class="text-muted">Questo atleta non ha ancora registrato allenamenti.</p>
+{% endif %}
+{% endblock %}

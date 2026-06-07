@@ -23,47 +23,65 @@ class ExerciseSession(models.Model):
         ('CARDIO', 'Cardio / Corsa / Bici / Nuoto'),
     ]
 
-    # Mappatura RIGIDA: 1 keyword (nel nome) -> 1 solo muscolo (nomenclatura da palestra)
+    # Mappatura RIGIDA: 1 keyword (nel nome) -> 1 solo muscolo (IT + sinonimi EN/commerciali).
+    # ORDINE ANTI-COLLISIONE: le keyword specifiche vengono prima delle generiche,
+    # perché get_target_muscle() restituisce il PRIMO match trovato.
     MUSCLE_MAP = {
-        # Petto
+        # --- Petto (prima di 'press' generico delle Spalle) ---
         'panca': 'Petto',
+        'bench': 'Petto',
         'croci': 'Petto',
+        'fly': 'Petto',
         'spinte': 'Petto',
         'dip': 'Petto',
         'piegamenti': 'Petto',
         'push up': 'Petto',
         'chest': 'Petto',
-        # Schiena
+        # --- Gambe (prima di 'press' Spalle e 'curl' Bicipiti: leg press / leg curl) ---
+        'squat': 'Gambe',
+        'leg': 'Gambe',
+        'affondi': 'Gambe',
+        'pressa': 'Gambe',
+        'stacco': 'Gambe',
+        'deadlift': 'Gambe',
+        'quad': 'Gambe',
+        'hamstring': 'Gambe',
+        'glute': 'Gambe',
+        'polpacci': 'Gambe',
+        'calf': 'Gambe',
+        # --- Tricipiti (prima di 'press' generico: french press) ---
+        'triceps': 'Tricipiti',
+        'pushdown': 'Tricipiti',
+        'french press': 'Tricipiti',
+        # --- Bicipiti ---
+        'curl': 'Bicipiti',
+        'biceps': 'Bicipiti',
+        'arm': 'Bicipiti',
+        # --- Spalle (prima di Schiena per risolvere 'lateral' vs 'lat') ---
+        'military': 'Spalle',
+        'lento': 'Spalle',
+        'shoulder press': 'Spalle',
+        'lateral': 'Spalle',
+        'deltoid': 'Spalle',
+        'alzate': 'Spalle',
+        'spalle': 'Spalle',
+        'press': 'Spalle',
+        # --- Schiena ---
         'trazioni': 'Schiena',
         'pull up': 'Schiena',
         'lat machine': 'Schiena',
         'rematore': 'Schiena',
         'pulley': 'Schiena',
-        # Spalle
-        'military': 'Spalle',
-        'lento': 'Spalle',
-        'shoulder press': 'Spalle',
-        'alzate': 'Spalle',
-        'spalle': 'Spalle',
-        # Bicipiti
-        'curl': 'Bicipiti',
-        # Tricipiti
-        'pushdown': 'Tricipiti',
-        'french press': 'Tricipiti',
-        # Gambe
-        'squat': 'Gambe',
-        'leg extension': 'Gambe',
-        'affondi': 'Gambe',
-        'pressa': 'Gambe',
-        'leg press': 'Gambe',
-        'stacco': 'Gambe',
-        'deadlift': 'Gambe',
-        'leg curl': 'Gambe',
-        'polpacci': 'Gambe',
-        'calf': 'Gambe',
-        # Addome
+        'row': 'Schiena',
+        'pull': 'Schiena',
+        'lat': 'Schiena',
+        'back': 'Schiena',
+        # --- Addome ---
         'crunch': 'Addome',
         'plank': 'Addome',
+        'core': 'Addome',
+        'abs': 'Addome',
+        'situp': 'Addome',
     }
 
     workout_log = models.ForeignKey(

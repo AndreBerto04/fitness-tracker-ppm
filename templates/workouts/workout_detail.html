@@ -67,7 +67,15 @@
                 <form method="post">
                     {% csrf_token %}
                     <input type="hidden" name="action_type" value="create_exercise">
-                    
+
+                    {% if exercise_form %}
+                        {% for field in exercise_form %}
+                            {% for err in field.errors %}
+                                <div class="alert alert-danger py-1 small mb-2">{{ field.label }}: {{ err }}</div>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+
                     <div class="mb-3">
                         <label class="form-label fw-bold">Tipo di Attività</label>
                         <select name="activity_type" class="form-select">
@@ -78,7 +86,7 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Nome Esercizio / Attività</label>
-                        <input type="text" name="exercise_name" class="form-control" placeholder="Es. Panca Piana, Squat, Corsa..." required>
+                        <input type="text" name="name" class="form-control" placeholder="Es. Panca Piana, Squat, Corsa..." required>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100">Aggiungi Esercizio alla Scheda</button>
@@ -95,7 +103,15 @@
                     <form method="post">
                         {% csrf_token %}
                         <input type="hidden" name="action_type" value="add_set">
-                        
+
+                        {% if set_form %}
+                            {% for field in set_form %}
+                                {% for err in field.errors %}
+                                    <div class="alert alert-danger py-1 small mb-2">{{ field.label }}: {{ err }}</div>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
                         <div class="mb-3">
                             <label class="form-label fw-bold">Seleziona Esercizio</label>
                             <select name="exercise_id" id="exerciseSelect" class="form-select">

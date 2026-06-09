@@ -49,6 +49,12 @@ class GoalForm(forms.ModelForm):
     class Meta:
         model = Goal
         fields = ['title', 'target_value', 'exercise_name', 'activity_type']
+        labels = {
+            'title': 'Titolo Obiettivo',
+            'target_value': 'Valore Obiettivo',
+            'exercise_name': 'Esercizio di Riferimento',
+            'activity_type': 'Tipo di Attività',
+        }
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'target_value': forms.TextInput(attrs={'class': 'form-control'}),

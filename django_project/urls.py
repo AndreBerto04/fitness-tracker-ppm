@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from workouts.views import (
     WorkoutListView, WorkoutCreateView, WorkoutUpdateView, WorkoutDeleteView,
     WorkoutDetailView, WorkoutEditView, ExerciseDeleteView, SetDeleteView,
-    CoachAthleteDetailView, GoalListView,
+    CoachAthleteDetailView, GoalListView, GoalDeleteView, GoalCompleteView,
 )
 
 
@@ -48,4 +48,6 @@ urlpatterns = [
 
     # 🆕 Rotta per la gestione degli obiettivi
     path('obiettivi/', GoalListView.as_view(), name='goal_list'),
+    path('obiettivi/<int:pk>/elimina/', GoalDeleteView.as_view(), name='goal_delete'),
+    path('obiettivi/<int:pk>/completa/', GoalCompleteView.as_view(), name='goal_complete'),
 ]

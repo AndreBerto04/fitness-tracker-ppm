@@ -8,6 +8,37 @@
     <span class="badge bg-primary fs-6">Atleti seguiti: {{ athletes|length }}</span>
 </div>
 
+<!-- RICHIESTE DI ABBONAMENTO IN ATTESA -->
+<div class="card shadow-sm mb-4 border-warning">
+    <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0">📨 Richieste in Attesa ({{ pending_requests|length }})</h5>
+    </div>
+    <div class="card-body">
+        {% if pending_requests %}
+            {% for req in pending_requests %}
+                <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                    <div>
+                        <strong>{{ req.atleta.username }}</strong>
+                        <small class="text-muted">vuole abbonarsi — {{ req.data_richiesta|date:"d/m/Y H:i" }}</small>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <form method="post" action="{% url 'accept_request' req.id %}" class="m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-success">✅ Accetta</button>
+                        </form>
+                        <form method="post" action="{% url 'reject_request' req.id %}" class="m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">❌ Rifiuta</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted mb-0">Nessuna richiesta in attesa.</p>
+        {% endif %}
+    </div>
+</div>
+
 <div class="card shadow-sm">
     <div class="card-body">
         {% if athletes %}
@@ -18,6 +49,7 @@
                         <th>Atleta</th>
                         <th>Peso (kg)</th>
                         <th>Allenamenti</th>
+                        <th>Scadenza</th>
                         <th>Azioni</th>
                     </tr>
                 </thead>
@@ -28,9 +60,19 @@
                         <td>{{ athlete.weight|default:"—" }}</td>
                         <td>{{ athlete.workouts.count }}</td>
                         <td>
-                            <a href="{% url 'coach_athlete_detail' athlete.id %}" class="btn btn-sm btn-primary">
-                                📂 Gestisci
-                            </a>
+                            {% with sub=athlete.get_active_subscription %}
+                                {% if sub and sub.data_scadenza %}{{ sub.data_scadenza|date:"d/m/Y" }}{% else %}—{% endif %}
+                            {% endwith %}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2 justify-content-center">
+                                <a href="{% url 'coach_athlete_detail' athlete.id %}" class="btn btn-sm btn-primary">📂 Gestisci</a>
+                                <form method="post" action="{% url 'terminate_subscription' athlete.id %}" class="m-0"
+                                      onsubmit="return confirm('Rimuovere questo atleta?')">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">❌ Rimuovi Atleta</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}

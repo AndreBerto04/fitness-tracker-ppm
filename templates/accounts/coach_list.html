@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Trova un Coach - Fitness Tracker{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">🤝 Trova il tuo Coach</h2>
+
+{% if user.coach %}
+    <div class="alert alert-success d-flex justify-content-between align-items-center">
+        <div>
+            Sei già seguito dal coach <strong>{{ user.coach.username }}</strong>.
+            {% with sub=user.get_active_subscription %}
+                {% if sub and sub.data_scadenza %}
+                    <span class="badge bg-secondary ms-2">Scadenza: {{ sub.data_scadenza|date:"d/m/Y" }}</span>
+                {% endif %}
+            {% endwith %}
+        </div>
+        <form method="post" action="{% url 'terminate_subscription' user.id %}" class="m-0"
+              onsubmit="return confirm('Interrompere la collaborazione con il coach?')">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">❌ Interrompi Collaborazione</button>
+        </form>
+    </div>
+{% else %}
+    <p class="text-muted">Scegli un coach e invia una richiesta di abbonamento. Il coach dovrà approvarla.</p>
+
+    <div class="row">
+        {% for coach in coaches %}
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">🧑‍🏫 {{ coach.username }}</h5>
+                        <p class="display-6 fw-bold text-primary mb-1">€ {{ coach.prezzo_mensile }}</p>
+                        <p class="small text-muted">al mese</p>
+
+                        <div class="mt-auto">
+                            {% if coach.id in pending_coach_ids %}
+                                <button class="btn btn-secondary w-100" disabled>⏳ Richiesta inviata</button>
+                            {% else %}
+                                <form method="post" action="{% url 'send_subscription' coach.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success w-100">Invia Richiesta di Abbonamento</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-muted">Nessun coach disponibile al momento.</p>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

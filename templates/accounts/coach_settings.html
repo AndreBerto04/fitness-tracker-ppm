@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Impostazioni Coach - Fitness Tracker{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow-sm mt-4">
+            <div class="card-body">
+                <h3 class="card-title mb-4">⚙️ Impostazioni Coach</h3>
+
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary w-100">💾 Salva</button>
+                </form>
+
+                <p class="text-muted small mt-3 mb-0">
+                    Prezzo attuale mostrato agli atleti: <strong>€ {{ user.prezzo_mensile }}</strong> / mese
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

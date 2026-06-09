@@ -8,12 +8,52 @@
     <a href="{% url 'workout_list' %}" class="btn btn-outline-secondary">← Dashboard</a>
 </div>
 
+<!-- ASSEGNAZIONE OBIETTIVI DA PARTE DEL COACH -->
+<div class="card shadow-sm mb-4 border-dark">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">🧠 Assegna un obiettivo a {{ athlete.username }}</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <form method="post" action="{% url 'coach_athlete_detail' athlete.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="create_goal">
+                    {% for field in goal_form %}
+                        <div class="mb-2">
+                            <label for="{{ field.id_for_label }}" class="form-label small fw-bold">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-dark w-100 mt-2">Assegna Obiettivo</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <h6 class="fw-bold">Obiettivi correnti</h6>
+                {% for goal in athlete_goals %}
+                    <div class="small border-bottom py-1">
+                        {{ goal.title }}
+                        {% if goal.assigned_by_coach %}<span class="badge bg-dark">Coach 🧠</span>{% endif %}
+                        {% if goal.is_completed %}<span class="badge bg-success">🏆</span>{% endif %}
+                    </div>
+                {% empty %}
+                    <p class="text-muted small mb-0">Nessun obiettivo impostato.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
 {% if workouts %}
     {% for workout in workouts %}
     <div class="card shadow-sm mb-3">
-        <div class="card-header d-flex justify-content-between">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <span class="fw-bold">{{ workout.title }}</span>
-            <span class="text-muted">{{ workout.date|date:"d/m/Y" }}</span>
+            <div class="d-flex align-items-center gap-2">
+                <span class="text-muted">{{ workout.date|date:"d/m/Y" }}</span>
+                <a href="{% url 'workout_detail' workout.id %}" class="btn btn-sm btn-outline-primary">🔍 Vedi Dettaglio</a>
+            </div>
         </div>
         <div class="card-body">
             <!-- Riepilogo esercizi -->

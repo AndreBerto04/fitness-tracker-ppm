@@ -142,6 +142,9 @@ class Goal(models.Model):
     activity_type = models.CharField(max_length=10, choices=ACTIVITY_CHOICES, default='FORZA')
     exercise_name = models.CharField(max_length=100, verbose_name="Nome Esercizio per calcolo", help_text="Es. Panca Piana o Corsa", default="Panca Piana")
 
+    # 🧠 True se l'obiettivo è stato assegnato dal coach all'atleta
+    assigned_by_coach = models.BooleanField(default=False)
+
     def __str__(self):
         return f"Obiettivo di {self.user.username}: {self.title}"
 

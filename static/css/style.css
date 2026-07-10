@@ -1,0 +1,61 @@
+/* ==========================================================================
+   Fitness Tracker — tema custom sopra Bootstrap 5.3 (CDN, non ricompilato)
+   Caricato DOPO bootstrap.min.css: le regole qui vincono a parità di
+   specificità grazie all'ordine nel <head>.
+   ========================================================================== */
+
+:root {
+  --brand-primary: #0d9488;
+  --brand-primary-dark: #0b7a70;
+  --brand-navy: #151b26;
+  --brand-radius: 0.7rem;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #f4f6f8;
+}
+
+/* --- Navbar: dal nero piatto di Bootstrap a un navy piu ricco --- */
+.navbar.bg-dark {
+  background-color: var(--brand-navy) !important;
+}
+
+/* --- Accento primario: dal blu di default a un teal energico --- */
+.btn-primary {
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--brand-primary-dark);
+  border-color: var(--brand-primary-dark);
+}
+.text-primary { color: var(--brand-primary) !important; }
+.bg-primary { background-color: var(--brand-primary) !important; }
+.border-primary { border-color: var(--brand-primary) !important; }
+
+a { color: var(--brand-primary); }
+a:hover { color: var(--brand-primary-dark); }
+
+/* --- Card: piu morbide, ombra leggera invece del bordo netto --- */
+.card {
+  border: none;
+  border-radius: var(--brand-radius);
+  box-shadow: 0 2px 14px rgba(15, 23, 42, 0.08);
+}
+
+/* --- Angoli coerenti su tutti i controlli interattivi --- */
+.btn,
+.form-control,
+.form-select,
+.badge,
+.alert {
+  border-radius: calc(var(--brand-radius) - 0.25rem);
+}
+
+/* --- Icone Bootstrap Icons: allineamento verticale pulito accanto al testo --- */
+.bi {
+  vertical-align: -0.125em;
+}

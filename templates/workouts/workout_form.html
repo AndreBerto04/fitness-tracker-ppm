@@ -8,7 +8,7 @@
         <div class="card shadow-sm mt-4">
             <div class="card-body">
                 <h3 class="card-title mb-4">
-                    {% if is_update %} ✏️ Modifica il tuo Allenamento {% else %} 🏋️‍♂️ Registra un Nuovo Allenamento {% endif %}
+                    {% if is_update %} <i class="bi bi-pencil-square"></i> Modifica il tuo Allenamento {% else %} <i class="bi bi-activity"></i> Registra un Nuovo Allenamento {% endif %}
                 </h3>
                 
                 <form method="post">
@@ -32,14 +32,14 @@
                         <div class="d-flex gap-2">
                             {% if is_update %}
                                 <button type="submit" name="save_mode" value="quick_save" class="btn btn-primary">
-                                    💾 Salva Titolo
+                                    <i class="bi bi-save"></i> Salva Titolo
                                 </button>
                                 <button type="submit" name="save_mode" value="go_to_hub" class="btn btn-success">
-                                    Modifica Esercizi ➔
+                                    Modifica Esercizi <i class="bi bi-arrow-right"></i>
                                 </button>
                             {% else %}
                                 <button type="submit" class="btn btn-success">
-                                    Continua e aggiungi esercizi ➔
+                                    Continua e aggiungi esercizi <i class="bi bi-arrow-right"></i>
                                 </button>
                             {% endif %}
                         </div>

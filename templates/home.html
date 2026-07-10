@@ -17,17 +17,17 @@
         <!-- Navigazione condizionata dal ruolo (RBAC nell'interfaccia) -->
         <div class="mt-4 d-flex flex-wrap gap-2">
             {% if user.is_coach %}
-                <a href="{% url 'workout_list' %}" class="btn btn-info btn-lg">🧑‍🏫 Dashboard Coach</a>
+                <a href="{% url 'workout_list' %}" class="btn btn-info btn-lg"><i class="bi bi-clipboard-data"></i> Dashboard Coach</a>
             {% else %}
-                <a href="{% url 'workout_list' %}" class="btn btn-primary btn-lg">📋 I Miei Allenamenti</a>
-                <a href="{% url 'workout_create' %}" class="btn btn-success btn-lg">+ Registra Allenamento</a>
-                <a href="{% url 'goal_list' %}" class="btn btn-warning btn-lg">🎯 I Miei Obiettivi</a>
+                <a href="{% url 'workout_list' %}" class="btn btn-primary btn-lg"><i class="bi bi-journal-text"></i> I Miei Allenamenti</a>
+                <a href="{% url 'workout_create' %}" class="btn btn-success btn-lg"><i class="bi bi-plus-lg"></i> Registra Allenamento</a>
+                <a href="{% url 'goal_list' %}" class="btn btn-warning btn-lg"><i class="bi bi-bullseye"></i> I Miei Obiettivi</a>
             {% endif %}
         </div>
 
         <form method="post" action="{% url 'logout' %}" class="mt-4">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Disconnetti</button>
+            <button type="submit" class="btn btn-danger"><i class="bi bi-box-arrow-right"></i> Disconnetti</button>
         </form>
     </div>
 </div>

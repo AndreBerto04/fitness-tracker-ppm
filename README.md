@@ -115,5 +115,7 @@ Il progetto è distribuito e raggiungibile pubblicamente al seguente indirizzo:
 1. Login come `coach_demo` → si apre la **Dashboard Coach** con `atleta_demo`.
 2. Click su *Gestisci* → storico allenamenti dell'atleta.
 3. Scrivi un feedback e salva → viene memorizzato sul `WorkoutLog`.
-4. Logout, login come `atleta_demo` → crea un allenamento e verifica gli obiettivi.
+4. Logout, login come `atleta_demo` → crea un allenamento, aggiungi esercizi/serie e verifica gli obiettivi.
+5. **Test permessi (azione vietata):** da `atleta_demo`, prova a visitare `/coach/atleta/<id>/`
+   (area riservata al coach) → risposta **403 Forbidden**, nessun accesso ai dati di altri utenti.
 

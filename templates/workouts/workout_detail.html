@@ -4,10 +4,10 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">📄 {{ workout.title }}</h2>
+    <h2 class="mb-0"><i class="bi bi-file-earmark-text"></i> {{ workout.title }}</h2>
     <div class="d-flex align-items-center gap-2">
         <span class="badge bg-secondary fs-6">{{ workout.date|date:"d/m/Y" }}</span>
-        <a href="{% url 'workout_edit' workout.pk %}" class="btn btn-sm btn-outline-success">🛠️ Gestisci esercizi</a>
+        <a href="{% url 'workout_edit' workout.pk %}" class="btn btn-sm btn-outline-success"><i class="bi bi-tools"></i> Gestisci esercizi</a>
     </div>
 </div>
 
@@ -26,7 +26,7 @@
     <div class="col-md-9 mb-3">
         <div class="card shadow-sm h-100">
             <div class="card-header bg-dark text-white">
-                <h5 class="mb-0">💪 Resoconto Muscolare Avanzato</h5>
+                <h5 class="mb-0"><i class="bi bi-activity"></i> Resoconto Muscolare Avanzato</h5>
             </div>
             <div class="card-body">
                 {% if muscle_report %}
@@ -61,7 +61,7 @@
 <!-- DETTAGLIO ESERCIZI E SERIE (SOLA LETTURA) -->
 <div class="card shadow-sm">
     <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">🏋️‍♂️ Esercizi Eseguiti</h5>
+        <h5 class="mb-0"><i class="bi bi-list-check"></i> Esercizi Eseguiti</h5>
     </div>
     <div class="card-body">
         {% if workout.exercises.all %}
@@ -80,14 +80,14 @@
                                 <div class="bg-light p-2 rounded small d-flex justify-content-between align-items-center {% if set.rpe >= 9 %}border border-danger{% endif %}">
                                     <div>
                                         {% if exercise.activity_type == 'FORZA' %}
-                                            💪 <strong>{{ set.reps }}</strong> rep @ <strong>{{ set.weight }}</strong> kg
+                                            <i class="bi bi-activity"></i> <strong>{{ set.reps }}</strong> rep @ <strong>{{ set.weight }}</strong> kg
                                         {% else %}
-                                            🏃‍♂️ <strong>{{ set.distance }}</strong> km in <strong>{{ set.duration }}</strong> min
+                                            <i class="bi bi-stopwatch"></i> <strong>{{ set.distance }}</strong> km in <strong>{{ set.duration }}</strong> min
                                         {% endif %}
                                     </div>
                                     {% if set.rpe %}
                                         {% if set.rpe >= 9 %}
-                                            <span class="badge bg-danger">🔥 RPE {{ set.rpe }} — Cedimento</span>
+                                            <span class="badge bg-danger"><i class="bi bi-fire"></i> RPE {{ set.rpe }} — Cedimento</span>
                                         {% else %}
                                             <span class="badge bg-warning text-dark">RPE {{ set.rpe }}</span>
                                         {% endif %}
@@ -106,7 +106,7 @@
     </div>
 </div>
 
-<a href="{% url 'workout_list' %}" class="btn btn-secondary mt-3">📋 Torna allo Storico</a>
+<a href="{% url 'workout_list' %}" class="btn btn-secondary mt-3"><i class="bi bi-arrow-left"></i> Torna allo Storico</a>
 
 <script>
     // Imposta la larghezza delle barre muscolari dopo il rendering (evita stili inline statici)

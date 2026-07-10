@@ -4,14 +4,14 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>📂 Log di {{ athlete.username }}</h2>
-    <a href="{% url 'workout_list' %}" class="btn btn-outline-secondary">← Dashboard</a>
+    <h2><i class="bi bi-folder2-open"></i> Log di {{ athlete.username }}</h2>
+    <a href="{% url 'workout_list' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Dashboard</a>
 </div>
 
 <!-- ASSEGNAZIONE OBIETTIVI DA PARTE DEL COACH -->
 <div class="card shadow-sm mb-4 border-dark">
     <div class="card-header bg-dark text-white">
-        <h5 class="mb-0">🧠 Assegna un obiettivo a {{ athlete.username }}</h5>
+        <h5 class="mb-0"><i class="bi bi-lightbulb-fill"></i> Assegna un obiettivo a {{ athlete.username }}</h5>
     </div>
     <div class="card-body">
         <div class="row">
@@ -34,8 +34,8 @@
                 {% for goal in athlete_goals %}
                     <div class="small border-bottom py-1">
                         {{ goal.title }}
-                        {% if goal.assigned_by_coach %}<span class="badge bg-dark">Coach 🧠</span>{% endif %}
-                        {% if goal.is_completed %}<span class="badge bg-success">🏆</span>{% endif %}
+                        {% if goal.assigned_by_coach %}<span class="badge bg-dark">Coach <i class="bi bi-lightbulb-fill"></i></span>{% endif %}
+                        {% if goal.is_completed %}<span class="badge bg-success"><i class="bi bi-trophy-fill"></i></span>{% endif %}
                     </div>
                 {% empty %}
                     <p class="text-muted small mb-0">Nessun obiettivo impostato.</p>
@@ -52,7 +52,7 @@
             <span class="fw-bold">{{ workout.title }}</span>
             <div class="d-flex align-items-center gap-2">
                 <span class="text-muted">{{ workout.date|date:"d/m/Y" }}</span>
-                <a href="{% url 'workout_detail' workout.id %}" class="btn btn-sm btn-outline-primary">🔍 Vedi Dettaglio</a>
+                <a href="{% url 'workout_detail' workout.id %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> Vedi Dettaglio</a>
             </div>
         </div>
         <div class="card-body">
@@ -69,7 +69,7 @@
             <form method="post" action="{% url 'coach_athlete_detail' athlete.id %}">
                 {% csrf_token %}
                 <input type="hidden" name="log_id" value="{{ workout.id }}">
-                <label class="form-label fw-bold">💬 Feedback del Coach</label>
+                <label class="form-label fw-bold"><i class="bi bi-chat-left-text"></i> Feedback del Coach</label>
                 <div class="input-group">
                     <textarea name="coach_feedback" class="form-control" rows="2"
                               placeholder="Scrivi un feedback...">{{ workout.coach_feedback|default_if_none:"" }}</textarea>

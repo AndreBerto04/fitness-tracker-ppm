@@ -21,10 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u73+r8b$&!@=k)5+nf*s#&!#*+qy+t1pesvqc31b@p*+v=tz)5'
+# SECRET_KEY = 'django-insecure-u73+r8b$&!@=k)5+nf*s#&!#*+qy+t1pesvqc31b@p*+v=tz)5'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-u73+r8b$&!@=k)5+nf*s#&!#*+qy+t1pesvqc31b@p*+v=tz)5')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 # localhost sempre permesso; in deploy si aggiunge il dominio Render via env var
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
@@ -126,6 +128,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+# Cartella con gli static condivisi di progetto (non legati a una singola app)
+STATICFILES_DIRS = [BASE_DIR / 'static']
 # Cartella di raccolta degli static per il deploy (collectstatic) + storage WhiteNoise
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STORAGES = {

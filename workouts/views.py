@@ -188,8 +188,9 @@ class WorkoutDeleteView(LoginRequiredMixin, DeleteView):
 
 
 # 6. ELIMINA UN INTERO ESERCIZIO (e le sue serie)
+# Richiesta POST: eliminare cambia lo stato del sistema (slide "GET and POST")
 class ExerciseDeleteView(LoginRequiredMixin, View):
-    def get(self, request, pk):
+    def post(self, request, pk):
         exercise = get_object_or_404(ExerciseSession, pk=pk, workout_log__user=request.user)
         workout_pk = exercise.workout_log.pk
         exercise.delete()
@@ -197,8 +198,9 @@ class ExerciseDeleteView(LoginRequiredMixin, View):
 
 
 # 7. ELIMINA UNA SINGOLA SERIE
+# Richiesta POST: eliminare cambia lo stato del sistema (slide "GET and POST")
 class SetDeleteView(LoginRequiredMixin, View):
-    def get(self, request, pk):
+    def post(self, request, pk):
         set_obj = get_object_or_404(ExerciseSet, pk=pk, exercise_session__workout_log__user=request.user)
         workout_pk = set_obj.exercise_session.workout_log.pk
         set_obj.delete()

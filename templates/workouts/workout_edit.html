@@ -4,10 +4,10 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">🛠️ Gestione: {{ workout.title }}</h2>
+    <h2 class="mb-0"><i class="bi bi-tools"></i> Gestione: {{ workout.title }}</h2>
     <div class="d-flex gap-2">
-        <a href="{% url 'workout_detail' workout.pk %}" class="btn btn-outline-primary">👁️ Visualizza scheda</a>
-        <a href="{% url 'workout_list' %}" class="btn btn-secondary">📋 Storico</a>
+        <a href="{% url 'workout_detail' workout.pk %}" class="btn btn-outline-primary"><i class="bi bi-eye"></i> Visualizza scheda</a>
+        <a href="{% url 'workout_list' %}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Storico</a>
     </div>
 </div>
 
@@ -26,8 +26,11 @@
                                 <h5 class="text-primary mb-2">{{ exercise.name }}
                                     <small class="text-muted fs-6">({{ exercise.get_activity_type_display }})</small>
                                 </h5>
-                                <a href="{% url 'delete_exercise' exercise.id %}" class="btn btn-sm btn-outline-danger py-0 px-1"
-                                   onclick="return confirm('Eliminare questo esercizio e tutte le sue serie?')">🗑️ Rimuovi</a>
+                                <form method="post" action="{% url 'delete_exercise' exercise.id %}" class="m-0"
+                                      onsubmit="return confirm('Eliminare questo esercizio e tutte le sue serie?')">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger py-0 px-1"><i class="bi bi-trash"></i> Rimuovi</button>
+                                </form>
                             </div>
 
                             {% if exercise.sets.all %}
@@ -36,14 +39,17 @@
                                         <div class="bg-light p-2 rounded small d-flex justify-content-between align-items-center">
                                             <div>
                                                 {% if exercise.activity_type == 'FORZA' %}
-                                                    💪 <strong>{{ set.reps }}</strong> rep @ <strong>{{ set.weight }}</strong> kg
+                                                    <i class="bi bi-activity"></i> <strong>{{ set.reps }}</strong> rep @ <strong>{{ set.weight }}</strong> kg
                                                 {% else %}
-                                                    🏃‍♂️ <strong>{{ set.distance }}</strong> km in <strong>{{ set.duration }}</strong> min
+                                                    <i class="bi bi-stopwatch"></i> <strong>{{ set.distance }}</strong> km in <strong>{{ set.duration }}</strong> min
                                                 {% endif %}
                                                 {% if set.rpe %}<span class="badge bg-warning text-dark ms-2">RPE {{ set.rpe }}</span>{% endif %}
                                             </div>
-                                            <a href="{% url 'delete_set' set.id %}" class="text-danger text-decoration-none fw-bold px-1"
-                                               onclick="return confirm('Eliminare questa serie?')">×</a>
+                                            <form method="post" action="{% url 'delete_set' set.id %}" class="m-0"
+                                                  onsubmit="return confirm('Eliminare questa serie?')">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-link text-danger text-decoration-none fw-bold px-1 py-0">×</button>
+                                            </form>
                                         </div>
                                     {% endfor %}
                                 </div>
@@ -63,7 +69,7 @@
     <div class="col-md-5">
         <div class="card shadow-sm mb-4 border-primary">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">🆕 1. Crea Attività / Esercizio</h5>
+                <h5 class="mb-0"><i class="bi bi-plus-lg"></i> 1. Crea Attività / Esercizio</h5>
             </div>
             <div class="card-body">
                 <form method="post">
@@ -98,7 +104,7 @@
 
         <div class="card shadow-sm border-success">
             <div class="card-header bg-success text-white">
-                <h5 class="mb-0">➕ 2. Inserisci Serie / Frazione</h5>
+                <h5 class="mb-0"><i class="bi bi-plus-lg"></i> 2. Inserisci Serie / Frazione</h5>
             </div>
             <div class="card-body">
                 {% if workout.exercises.all %}

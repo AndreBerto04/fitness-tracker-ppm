@@ -116,3 +116,4 @@ Il progetto è distribuito e raggiungibile pubblicamente al seguente indirizzo:
 2. Click su *Gestisci* → storico allenamenti dell'atleta.
 3. Scrivi un feedback e salva → viene memorizzato sul `WorkoutLog`.
 4. Logout, login come `atleta_demo` → crea un allenamento e verifica gli obiettivi.
+

@@ -1,4 +1,4 @@
-# 🏋️ Fitness Tracker — Back-end PPM 2026
+# Fitness Tracker — Back-end PPM 2026
 
 **Tipo progetto:** Full-Stack Web Application
 **Framework:** Django 4.2

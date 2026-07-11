@@ -17,18 +17,16 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}"><i class="bi bi-heart-pulse-fill"></i> FitnessTracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-label="Menu">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="mainNav">
                 {% if user.is_authenticated %}
                 <ul class="navbar-nav me-auto">
                     {% if user.is_coach %}
-                        <!-- Menu Coach: gestione atleti + impostazioni -->
                         <li class="nav-item"><a class="nav-link" href="{% url 'workout_list' %}"><i class="bi bi-clipboard-data"></i> Dashboard Coach</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'coach_settings' %}"><i class="bi bi-gear"></i> Impostazioni</a></li>
                     {% else %}
-                        <!-- Menu Atleta: allenamenti, obiettivi, marketplace coach -->
                         <li class="nav-item"><a class="nav-link" href="{% url 'workout_list' %}"><i class="bi bi-journal-text"></i> Allenamenti</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'goal_list' %}"><i class="bi bi-bullseye"></i> Obiettivi</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'coach_list' %}"><i class="bi bi-people"></i> Trova Coach</a></li>

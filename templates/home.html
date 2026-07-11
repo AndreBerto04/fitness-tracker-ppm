@@ -14,7 +14,6 @@
             </strong>
         </p>
 
-        <!-- Navigazione condizionata dal ruolo (RBAC nell'interfaccia) -->
         <div class="mt-4 d-flex flex-wrap gap-2">
             {% if user.is_coach %}
                 <a href="{% url 'workout_list' %}" class="btn btn-info btn-lg"><i class="bi bi-clipboard-data"></i> Dashboard Coach</a>

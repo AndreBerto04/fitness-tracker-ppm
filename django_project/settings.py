@@ -28,7 +28,6 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-u73+r8b$&!@=k)
 # DEBUG = True
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-# localhost sempre permesso; in deploy si aggiunge il dominio Render via env var
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 _render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if _render_host:
@@ -44,14 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Applicazioni locali del progetto
     'accounts.apps.AccountsConfig',
     'workouts',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # WhiteNoise serve i file statici in produzione senza un web server esterno
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -128,9 +125,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-# Cartella con gli static condivisi di progetto (non legati a una singola app)
 STATICFILES_DIRS = [BASE_DIR / 'static']
-# Cartella di raccolta degli static per il deploy (collectstatic) + storage WhiteNoise
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STORAGES = {
     'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
@@ -142,11 +137,7 @@ STORAGES = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Configurazione del modello utente personalizzato del progetto
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-# Dove mandare l'utente dopo che ha effettuato il login con successo
 LOGIN_REDIRECT_URL = 'home'
-
-# Dove mandare l'utente dopo che ha effettuato il logout
 LOGOUT_REDIRECT_URL = 'login'

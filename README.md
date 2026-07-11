@@ -29,10 +29,9 @@ Due ruoli sul `CustomUser` (`is_coach`):
 - **Atleta (standard user):** gestisce i propri allenamenti, serie e obiettivi.
 - **Coach:** accede alla dashboard dei propri atleti e scrive il `coach_feedback` sui loro log.
 
-Il controllo è applicato su due livelli (*defense in depth*):
+Il controllo è applicato su due livelli:
 1. **Dominio (view):** le query filtrano sempre per proprietario
-   (`request.user.athletes`, `WorkoutLog.objects.filter(user=athlete)`) → niente accesso
-   orizzontale / IDOR.
+   (`request.user.athletes`, `WorkoutLog.objects.filter(user=athlete)`) → mai dati di un altro utente.
 2. **Presentazione (template):** menù e pulsanti differenziati con `{% if user.is_coach %}`.
 
 ## 3. Funzionalità per ruolo
@@ -58,21 +57,15 @@ Il controllo è applicato su due livelli (*defense in depth*):
 ## 5. Installazione locale
 
 ```bash
-# 1. Clona il repository
 git clone <URL_REPO>
 cd fitness_tracker_project
 
-# 2. Crea e attiva l'ambiente virtuale
 python3 -m venv venv
 source venv/bin/activate        # Windows: venv\Scripts\activate
 
-# 3. Installa le dipendenze
 pip install -r requirements.txt
 
-# 4. Applica le migrazioni (il DB demo è già incluso; questo passo è idempotente)
 python manage.py migrate
-
-# 5. Avvia il server di sviluppo
 python manage.py runserver
 ```
 
@@ -91,12 +84,10 @@ python manage.py createsuperuser
 tramite la variabile `RENDER_EXTERNAL_HOSTNAME`. I file statici sono serviti da WhiteNoise.
 
 ```bash
-# Build (eseguito dalla piattaforma)
 pip install -r requirements.txt
 python manage.py collectstatic --noinput
 python manage.py migrate
 
-# Start command
 gunicorn django_project.wsgi
 ```
 
@@ -108,14 +99,12 @@ Account demo per la commissione:
 | Coach  | `coach_demo`  | `coach12345`  |
 
 ## 🌐 Deploy Online
-Il progetto è distribuito e raggiungibile pubblicamente al seguente indirizzo:
-**URL Deploy:** [https://fitness-tracker-ppm.onrender.com](https://fitness-tracker-ppm.onrender.com)
+**URL:** [https://fitness-tracker-ppm.onrender.com](https://fitness-tracker-ppm.onrender.com)
 
 ## 7. Test rapido nel browser
 1. Login come `coach_demo` → si apre la **Dashboard Coach** con `atleta_demo`.
 2. Click su *Gestisci* → storico allenamenti dell'atleta.
 3. Scrivi un feedback e salva → viene memorizzato sul `WorkoutLog`.
 4. Logout, login come `atleta_demo` → crea un allenamento, aggiungi esercizi/serie e verifica gli obiettivi.
-5. **Test permessi (azione vietata):** da `atleta_demo`, prova a visitare `/coach/atleta/<id>/`
-   (area riservata al coach) → risposta **403 Forbidden**, nessun accesso ai dati di altri utenti.
-
+5. **Test permessi:** da `atleta_demo`, prova a visitare `/coach/atleta/<id>/`
+   (area riservata al coach) → risposta **403 Forbidden**.

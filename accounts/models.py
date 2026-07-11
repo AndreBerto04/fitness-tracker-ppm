@@ -1,10 +1,8 @@
-# accounts/models.py
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class CustomUser(AbstractUser):
-    # Ruoli e Relazioni
     is_coach = models.BooleanField(default=False)
     coach = models.ForeignKey(
         'self',
@@ -14,12 +12,10 @@ class CustomUser(AbstractUser):
         related_name='athletes'
     )
 
-    # Dati Antropometrici e Personali
     age = models.PositiveIntegerField(null=True, blank=True)
     weight = models.FloatField(verbose_name="Peso Corporeo (kg)", null=True, blank=True)
     body_fat = models.FloatField(verbose_name="Massa Grassa (%)", null=True, blank=True)
 
-    # Prezzo mensile dell'abbonamento richiesto dal coach (€)
     prezzo_mensile = models.DecimalField(
         verbose_name="Prezzo mensile (€)",
         max_digits=6, decimal_places=2, default=0.00
@@ -48,12 +44,10 @@ class CustomUser(AbstractUser):
             self.coach = None
             self.save()
 
-    # Helper metod per calcolare i suggerimenti in base al peso (Valutazione Multimediale UX)
     def get_suggested_goals(self):
         if not self.weight or self.is_coach:
             return []
-        
-        # Standard atletici basati su moltiplicatori del peso corporeo (BW)
+
         return [
             {
                 'name': 'Target Panca Piana (Livello Intermedio)',
@@ -74,7 +68,6 @@ class CustomUser(AbstractUser):
         ]
 
 
-# Richiesta di abbonamento Atleta -> Coach (sistema sotto-approvazione)
 class SubscriptionRequest(models.Model):
     STATUS_CHOICES = [
         ('PENDING', 'In attesa'),

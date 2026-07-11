@@ -16,7 +16,6 @@ class WorkoutLogForm(forms.ModelForm):
         }
 
 
-# ModelForm per la creazione di un esercizio (Passo 1 del dettaglio)
 class ExerciseSessionForm(forms.ModelForm):
     class Meta:
         model = ExerciseSession
@@ -30,7 +29,6 @@ class ExerciseSessionForm(forms.ModelForm):
         }
 
 
-# ModelForm per l'inserimento di una serie/frazione (Passo 2 del dettaglio)
 class ExerciseSetForm(forms.ModelForm):
     class Meta:
         model = ExerciseSet
@@ -44,7 +42,6 @@ class ExerciseSetForm(forms.ModelForm):
         }
 
 
-# ModelForm per l'attivazione/creazione di un obiettivo
 class GoalForm(forms.ModelForm):
     class Meta:
         model = Goal

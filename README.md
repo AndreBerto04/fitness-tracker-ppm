@@ -98,7 +98,7 @@ Account demo per la commissione:
 | Atleta | `atleta_demo` | `atleta12345` |
 | Coach  | `coach_demo`  | `coach12345`  |
 
-## 🌐 Deploy Online
+## Deploy Online
 **URL:** [https://fitness-tracker-ppm.onrender.com](https://fitness-tracker-ppm.onrender.com)
 
 ## 7. Test rapido nel browser

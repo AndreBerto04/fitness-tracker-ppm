@@ -36,7 +36,7 @@
                     <li class="nav-item">
                         <span class="navbar-text me-3">
                             {{ user.username }}
-                            <span class="badge bg-{% if user.is_coach %}info{% else %}secondary{% endif %}">
+                            <span class="badge text-bg-{% if user.is_coach %}info{% else %}secondary{% endif %}">
                                 {% if user.is_coach %}Coach{% else %}Atleta{% endif %}
                             </span>
                         </span>

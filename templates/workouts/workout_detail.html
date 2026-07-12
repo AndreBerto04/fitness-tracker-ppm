@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0"><i class="bi bi-file-earmark-text"></i> {{ workout.title }}</h2>
+    <h1 class="h2 mb-0"><i class="bi bi-file-earmark-text"></i> {{ workout.title }}</h1>
     <div class="d-flex align-items-center gap-2">
         <span class="badge bg-secondary fs-6">{{ workout.date|date:"d/m/Y" }}</span>
         <a href="{% url 'workout_edit' workout.pk %}" class="btn btn-sm btn-outline-success"><i class="bi bi-tools"></i> Gestisci esercizi</a>
@@ -15,7 +15,7 @@
     <div class="col-md-3 mb-3">
         <div class="card text-center shadow-sm h-100 border-primary">
             <div class="card-body d-flex flex-column justify-content-center">
-                <h6 class="text-muted text-uppercase small mb-1">Volume Totale</h6>
+                <h2 class="h6 text-muted text-uppercase small mb-1">Volume Totale</h2>
                 <p class="display-6 fw-bold text-primary mb-0">{{ total_volume }}</p>
                 <span class="small text-muted">kg sollevati (reps × peso)</span>
             </div>
@@ -25,7 +25,7 @@
     <div class="col-md-9 mb-3">
         <div class="card shadow-sm h-100">
             <div class="card-header bg-dark text-white">
-                <h5 class="mb-0"><i class="bi bi-activity"></i> Resoconto Muscolare Avanzato</h5>
+                <h2 class="h5 mb-0"><i class="bi bi-activity"></i> Resoconto Muscolare Avanzato</h2>
             </div>
             <div class="card-body">
                 {% if muscle_report %}
@@ -59,15 +59,15 @@
 
 <div class="card shadow-sm">
     <div class="card-header bg-primary text-white">
-        <h5 class="mb-0"><i class="bi bi-list-check"></i> Esercizi Eseguiti</h5>
+        <h2 class="h5 mb-0"><i class="bi bi-list-check"></i> Esercizi Eseguiti</h2>
     </div>
     <div class="card-body">
         {% if workout.exercises.all %}
             {% for exercise in workout.exercises.all %}
                 <div class="border-start border-4 border-primary ps-3 mb-4">
-                    <h5 class="text-primary mb-1">{{ exercise.name }}
+                    <h3 class="h5 text-primary mb-1">{{ exercise.name }}
                         <small class="text-muted fs-6">({{ exercise.get_activity_type_display }})</small>
-                    </h5>
+                    </h3>
                     <p class="small text-muted mb-2">
                         Target: <span class="badge bg-light text-dark border">{{ exercise.get_target_muscle }}</span>
                     </p>

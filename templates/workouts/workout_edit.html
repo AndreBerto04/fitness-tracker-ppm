@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0"><i class="bi bi-tools"></i> Gestione: {{ workout.title }}</h2>
+    <h1 class="h2 mb-0"><i class="bi bi-tools"></i> Gestione: {{ workout.title }}</h1>
     <div class="d-flex gap-2">
         <a href="{% url 'workout_detail' workout.pk %}" class="btn btn-outline-primary"><i class="bi bi-eye"></i> Visualizza scheda</a>
         <a href="{% url 'workout_list' %}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Storico</a>
@@ -15,16 +15,16 @@
     <div class="col-md-7 mb-4">
         <div class="card shadow-sm">
             <div class="card-header bg-dark text-white">
-                <h5 class="mb-0">Esercizi della sessione</h5>
+                <h2 class="h5 mb-0">Esercizi della sessione</h2>
             </div>
             <div class="card-body">
                 {% if workout.exercises.all %}
                     {% for exercise in workout.exercises.all %}
                         <div class="border-start border-4 border-primary ps-3 mb-4">
                             <div class="d-flex justify-content-between align-items-start">
-                                <h5 class="text-primary mb-2">{{ exercise.name }}
+                                <h3 class="h5 text-primary mb-2">{{ exercise.name }}
                                     <small class="text-muted fs-6">({{ exercise.get_activity_type_display }})</small>
-                                </h5>
+                                </h3>
                                 <form method="post" action="{% url 'delete_exercise' exercise.id %}" class="m-0"
                                       onsubmit="return confirm('Eliminare questo esercizio e tutte le sue serie?')">
                                     {% csrf_token %}
@@ -67,7 +67,7 @@
     <div class="col-md-5">
         <div class="card shadow-sm mb-4 border-primary">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0"><i class="bi bi-plus-lg"></i> 1. Crea Attività / Esercizio</h5>
+                <h2 class="h5 mb-0"><i class="bi bi-plus-lg"></i> 1. Crea Attività / Esercizio</h2>
             </div>
             <div class="card-body">
                 <form method="post">
@@ -83,16 +83,16 @@
                     {% endif %}
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Tipo di Attività</label>
-                        <select name="activity_type" class="form-select">
+                        <label for="id_activity_type" class="form-label fw-bold">Tipo di Attività</label>
+                        <select name="activity_type" id="id_activity_type" class="form-select">
                             <option value="FORZA">Forza (Palestra / Corpo Libero)</option>
                             <option value="CARDIO">Cardio (Corsa / Bici / Nuoto)</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Nome Esercizio / Attività</label>
-                        <input type="text" name="name" class="form-control" placeholder="Es. Panca Piana, Squat, Corsa..." required>
+                        <label for="id_exercise_name" class="form-label fw-bold">Nome Esercizio / Attività</label>
+                        <input type="text" name="name" id="id_exercise_name" class="form-control" placeholder="Es. Panca Piana, Squat, Corsa..." required>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100">Aggiungi Esercizio</button>
@@ -102,7 +102,7 @@
 
         <div class="card shadow-sm border-success">
             <div class="card-header bg-success text-white">
-                <h5 class="mb-0"><i class="bi bi-plus-lg"></i> 2. Inserisci Serie / Frazione</h5>
+                <h2 class="h5 mb-0"><i class="bi bi-plus-lg"></i> 2. Inserisci Serie / Frazione</h2>
             </div>
             <div class="card-body">
                 {% if workout.exercises.all %}
@@ -119,7 +119,7 @@
                         {% endif %}
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Seleziona Esercizio</label>
+                            <label for="exerciseSelect" class="form-label fw-bold">Seleziona Esercizio</label>
                             <select name="exercise_id" id="exerciseSelect" class="form-select">
                                 {% for exercise in workout.exercises.all %}
                                     <option value="{{ exercise.id }}" data-type="{{ exercise.activity_type }}">
@@ -131,29 +131,29 @@
 
                         <div id="setForzaFields" class="row">
                             <div class="col-6 mb-3">
-                                <label class="form-label small fw-bold">Ripetizioni</label>
-                                <input type="number" name="reps" class="form-control" placeholder="Es. 10">
+                                <label for="id_reps" class="form-label small fw-bold">Ripetizioni</label>
+                                <input type="number" name="reps" id="id_reps" class="form-control" placeholder="Es. 10">
                             </div>
                             <div class="col-6 mb-3">
-                                <label class="form-label small fw-bold">Peso (kg)</label>
-                                <input type="number" step="0.01" name="weight" class="form-control" placeholder="Es. 50">
+                                <label for="id_weight" class="form-label small fw-bold">Peso (kg)</label>
+                                <input type="number" step="0.01" name="weight" id="id_weight" class="form-control" placeholder="Es. 50">
                             </div>
                         </div>
 
                         <div id="setCardioFields" class="row d-none">
                             <div class="col-6 mb-3">
-                                <label class="form-label small fw-bold">Distanza (km)</label>
-                                <input type="number" step="0.01" name="distance" class="form-control" placeholder="Es. 5.0">
+                                <label for="id_distance" class="form-label small fw-bold">Distanza (km)</label>
+                                <input type="number" step="0.01" name="distance" id="id_distance" class="form-control" placeholder="Es. 5.0">
                             </div>
                             <div class="col-6 mb-3">
-                                <label class="form-label small fw-bold">Durata (min)</label>
-                                <input type="number" name="duration" class="form-control" placeholder="Es. 25">
+                                <label for="id_duration" class="form-label small fw-bold">Durata (min)</label>
+                                <input type="number" name="duration" id="id_duration" class="form-control" placeholder="Es. 25">
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Fatica Percepita (RPE 1-10)</label>
-                            <input type="number" name="rpe" min="1" max="10" class="form-control" placeholder="Es. 8">
+                            <label for="id_rpe" class="form-label fw-bold">Fatica Percepita (RPE 1-10)</label>
+                            <input type="number" name="rpe" id="id_rpe" min="1" max="10" class="form-control" placeholder="Es. 8">
                         </div>
 
                         <button type="submit" class="btn btn-success w-100">Registra Serie</button>

@@ -50,7 +50,7 @@ class CustomUser(AbstractUser):
 
         return [
             {
-                'name': 'Target Panca Piana (Livello Intermedio)',
+                'title': 'Obiettivo Panca Piana (Livello Intermedio)',
                 'activity_type': 'FORZA',
                 'exercise_name': 'Panca Piana',
                 'target_value': round(self.weight * 1.0, 1),
@@ -58,7 +58,7 @@ class CustomUser(AbstractUser):
                 'description': 'Sollevare il 100% del proprio peso corporeo per 1 rep massimale.'
             },
             {
-                'name': 'Target Squat (Livello Intermedio)',
+                'title': 'Obiettivo Squat (Livello Intermedio)',
                 'activity_type': 'FORZA',
                 'exercise_name': 'Squat',
                 'target_value': round(self.weight * 1.25, 1),

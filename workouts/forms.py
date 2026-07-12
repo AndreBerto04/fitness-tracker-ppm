@@ -8,6 +8,10 @@ class WorkoutLogForm(forms.ModelForm):
 
         fields = ['title']
 
+        labels = {
+            'title': 'Titolo',
+        }
+
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',

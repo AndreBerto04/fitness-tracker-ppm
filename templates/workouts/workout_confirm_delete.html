@@ -14,9 +14,9 @@
                 
                 <form method="post">
                     {% csrf_token %}
-                    <div class="d-flex justify-content-center gap-3 mt-4">
-                        <a href="{% url 'workout_list' %}" class="btn btn-secondary">Annulla</a>
-                        <button type="submit" class="btn btn-danger">Sì, Elimina Definitivamente</button>
+                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-2 gap-sm-3 mt-4">
+                        <a href="{% url 'workout_list' %}" class="btn btn-secondary order-2 order-sm-1">Annulla</a>
+                        <button type="submit" class="btn btn-danger order-1 order-sm-2">Sì, Elimina Definitivamente</button>
                     </div>
                 </form>
             </div>

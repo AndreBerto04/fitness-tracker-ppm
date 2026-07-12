@@ -26,10 +26,10 @@
                         </div>
                     {% endfor %}
                     
-                    <div class="d-flex justify-content-between align-items-center mt-4">
-                        <a href="{% url 'workout_list' %}" class="btn btn-secondary">Annulla</a>
+                    <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mt-4">
+                        <a href="{% url 'workout_list' %}" class="btn btn-secondary order-2 order-md-1">Annulla</a>
 
-                        <div class="d-flex gap-2">
+                        <div class="d-flex flex-column flex-md-row gap-2 order-1 order-md-2">
                             {% if is_update %}
                                 <button type="submit" name="save_mode" value="quick_save" class="btn btn-primary">
                                     <i class="bi bi-save"></i> Salva Titolo
@@ -43,7 +43,7 @@
                                 </button>
                             {% endif %}
                         </div>
-                    </div>    
+                    </div>
                 </form>
             </div>
         </div>

@@ -7,6 +7,9 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = ("username", "email", "age", "weight")
+        labels = {
+            "age": "Età",
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -27,7 +30,7 @@ class ProfileForm(forms.ModelForm):
         fields = ["weight", "body_fat"]
         labels = {
             "weight": "Peso Corporeo (kg)",
-            "body_fat": "Massa Magra / Body Fat (%)",
+            "body_fat": "Massa Grassa (%)",
         }
         widgets = {
             "weight": forms.NumberInput(attrs={"class": "form-control", "step": "0.1", "min": "0", "placeholder": "Es. 75"}),

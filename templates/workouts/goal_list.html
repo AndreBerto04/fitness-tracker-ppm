@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}I Tuoi Obiettivi - FitnessTracker{% endblock %}
+{% block title %}I Tuoi Obiettivi - Fitness Tracker{% endblock %}
 
 {% block content %}
 <div class="container py-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1><i class="bi bi-bullseye"></i> Pannello Obiettivi Fitness</h1>
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-4">
+        <h1 class="h2"><i class="bi bi-bullseye"></i> Pannello Obiettivi Fitness</h1>
         <a href="{% url 'workout_list' %}" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left"></i> Torna allo Storico
         </a>
@@ -16,7 +16,7 @@
         <div class="col-md-8 mb-4">
             <div class="card shadow-sm">
                 <div class="card-header bg-dark text-white">
-                    <h2 class="h5 mb-0"><i class="bi bi-journal-text"></i> I tuoi Target Correnti</h2>
+                    <h2 class="h5 mb-0"><i class="bi bi-journal-text"></i> I tuoi Obiettivi Correnti</h2>
                 </div>
                 <div class="card-body">
                     {% if goals %}
@@ -37,7 +37,7 @@
                                 <p class="text-muted small mb-2">
                                     Attività: <strong>{{ goal.get_activity_type_display }}</strong> |
                                     Esercizio di riferimento: <code>{{ goal.exercise_name }}</code> |
-                                    Target da raggiungere: <strong>{{ goal.target_value }}</strong>
+                                    Valore da raggiungere: <strong>{{ goal.target_value }}</strong>
                                 </p>
 
                                 {% with progress=goal.get_progress|default_if_none:0 %}
@@ -94,7 +94,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm border-info">
                 <div class="card-header text-bg-info">
-                    <h2 class="h5 mb-0"><i class="bi bi-stars"></i> Target Suggeriti dal Sistema</h2>
+                    <h2 class="h5 mb-0"><i class="bi bi-stars"></i> Obiettivi Suggeriti dal Sistema</h2>
                 </div>
                 <div class="card-body">
                     <form method="post" class="mb-3 p-3 bg-light rounded border">
@@ -142,7 +142,7 @@
                     {% else %}
                         <div class="text-center py-3 text-muted">
                             <p class="small mb-1">Nessun dato antropometrico rilevato.</p>
-                            <p class="x-small mb-0">Inserisci il tuo peso qui sopra per sbloccare i target consigliati.</p>
+                            <p class="x-small mb-0">Inserisci il tuo peso qui sopra per sbloccare gli obiettivi consigliati.</p>
                         </div>
                     {% endif %}
                 </div>

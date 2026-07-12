@@ -151,15 +151,10 @@
     </div>
 </div>
 <script>
-    // Questo script viene eseguito sul browser dopo che Django ha compilato la pagina
     document.addEventListener("DOMContentLoaded", function() {
-        // Selezioniamo tutte le barre che hanno la nostra classe speciale
         const bars = document.querySelectorAll('.dynamic-progress-bar');
-        
         bars.forEach(function(bar) {
-            // Estraiamo il numero memorizzato nel data-progress
             const progressValue = bar.getAttribute('data-progress');
-            // Applichiamo la larghezza in tempo reale senza confondere i linter di VS Code
             bar.style.width = progressValue + '%';
         });
     });

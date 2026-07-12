@@ -107,7 +107,6 @@
 <a href="{% url 'workout_list' %}" class="btn btn-secondary mt-3"><i class="bi bi-arrow-left"></i> Torna allo Storico</a>
 
 <script>
-    // Imposta la larghezza delle barre muscolari dopo il rendering (evita stili inline statici)
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll('.muscle-bar').forEach(function (bar) {
             bar.style.width = bar.getAttribute('data-bar-width') + '%';

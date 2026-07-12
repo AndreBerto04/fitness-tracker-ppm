@@ -59,3 +59,50 @@ a:hover { color: var(--brand-primary-dark); }
 .bi {
   vertical-align: -0.125em;
 }
+
+/* --- Contrasto testo/sfondo: colori di default Bootstrap troppo chiari per il testo bianco --- */
+code {
+  color: #a02664;
+}
+.badge.bg-success,
+.progress-bar.bg-success {
+  background-color: #146c43 !important;
+}
+.badge.bg-secondary,
+.progress-bar.bg-secondary {
+  background-color: #565e64 !important;
+}
+
+/* --- Pulsanti outline: stesso discorso, più il blu di default al posto del teal --- */
+.btn-outline-primary {
+  --bs-btn-color: var(--brand-primary);
+  --bs-btn-border-color: var(--brand-primary);
+  --bs-btn-hover-bg: var(--brand-primary);
+  --bs-btn-hover-border-color: var(--brand-primary);
+  --bs-btn-active-bg: var(--brand-primary-dark);
+  --bs-btn-active-border-color: var(--brand-primary-dark);
+}
+.btn-outline-success {
+  --bs-btn-color: #146c43;
+  --bs-btn-border-color: #146c43;
+  --bs-btn-hover-bg: #146c43;
+  --bs-btn-hover-border-color: #146c43;
+  --bs-btn-active-bg: #146c43;
+  --bs-btn-active-border-color: #146c43;
+}
+.btn-outline-danger {
+  --bs-btn-color: #b02a37;
+  --bs-btn-border-color: #b02a37;
+  --bs-btn-hover-bg: #b02a37;
+  --bs-btn-hover-border-color: #b02a37;
+  --bs-btn-active-bg: #b02a37;
+  --bs-btn-active-border-color: #b02a37;
+}
+.btn-outline-secondary {
+  --bs-btn-color: #565e64;
+  --bs-btn-border-color: #565e64;
+  --bs-btn-hover-bg: #565e64;
+  --bs-btn-hover-border-color: #565e64;
+  --bs-btn-active-bg: #565e64;
+  --bs-btn-active-border-color: #565e64;
+}

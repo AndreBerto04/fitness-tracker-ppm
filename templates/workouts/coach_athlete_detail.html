@@ -66,9 +66,9 @@
             <form method="post" action="{% url 'coach_athlete_detail' athlete.id %}">
                 {% csrf_token %}
                 <input type="hidden" name="log_id" value="{{ workout.id }}">
-                <label class="form-label fw-bold"><i class="bi bi-chat-left-text"></i> Feedback del Coach</label>
+                <label for="id_feedback_{{ workout.id }}" class="form-label fw-bold"><i class="bi bi-chat-left-text"></i> Feedback del Coach</label>
                 <div class="input-group">
-                    <textarea name="coach_feedback" class="form-control" rows="2"
+                    <textarea name="coach_feedback" id="id_feedback_{{ workout.id }}" class="form-control" rows="2"
                               placeholder="Scrivi un feedback...">{{ workout.coach_feedback|default_if_none:"" }}</textarea>
                     <button type="submit" class="btn btn-success">Salva</button>
                 </div>

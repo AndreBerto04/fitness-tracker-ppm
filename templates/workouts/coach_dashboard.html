@@ -100,7 +100,7 @@
                             <form method="post" action="{% url 'terminate_subscription' athlete.id %}" class="m-0"
                                   onsubmit="return confirm('Rimuovere questo atleta?')">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
+                                <button type="submit" class="btn btn-sm btn-outline-danger" aria-label="Rimuovi atleta"><i class="bi bi-x-lg"></i></button>
                             </form>
                         </div>
                     </div>
